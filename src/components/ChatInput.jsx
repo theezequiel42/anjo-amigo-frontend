@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Mic, MicOff, Send, Volume2, VolumeX } from 'lucide-react';
 
 function ChatInput({ onSend, isVoiceMuted, setIsVoiceMuted }) {
   const inputRef = useRef(null);
@@ -58,7 +59,9 @@ function ChatInput({ onSend, isVoiceMuted, setIsVoiceMuted }) {
         autoComplete="off"
         required
       />
-      <button type="submit" className="send-button">Enviar</button>
+      <button type="submit" className="icon-btn" title="Enviar mensagem" aria-label="Enviar">
+        <Send size={20} />
+      </button>
 
       <button
         type="button"
@@ -67,7 +70,7 @@ function ChatInput({ onSend, isVoiceMuted, setIsVoiceMuted }) {
         title="Falar"
         aria-label="Ativar reconhecimento de voz"
       >
-        🎤
+        <Mic size={20} />
       </button>
 
       <button
@@ -78,7 +81,7 @@ function ChatInput({ onSend, isVoiceMuted, setIsVoiceMuted }) {
         aria-label="Ativar ou desativar leitura em voz alta"
         title="Ativar/Desativar voz"
       >
-        🔈
+        {isVoiceMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
       </button>
     </form>
   );
