@@ -5,7 +5,7 @@ function ChatInput({ onSend, isVoiceMuted, setIsVoiceMuted }) {
   const inputRef = useRef(null);
   const micButtonRef = useRef(null);
   const recognitionRef = useRef(null);
-  const [isListening, setIsListening] = useState(false); // 👈 novo estado
+  const [isListening, setIsListening] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
