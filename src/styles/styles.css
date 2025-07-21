@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Estilo base ---------- */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #fce4ec; /* Light Pink */
+}
+
+/* ---------- Container do chat ---------- */
+.chat-container {
+    max-width: 800px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+.chat-header {
+    background-color: #d81b60; /* Dark Pink */
+    color: #ffffff;
+    padding: 1.5rem;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+    background-color: #f8fafc; /* Very light gray/blue */
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------- Mensagens ---------- */
+.message-bubble {
+    max-width: 70%;
+    padding: 0.8rem 1.2rem;
+    border-radius: 1.2rem;
+    margin-bottom: 1rem;
+    word-wrap: break-word;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/* Corrige problema de invisibilidade ao hover */
+.message-bubble:hover {
+    background-color: inherit;
+    color: inherit;
+}
+
+.message-bubble.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.user-message {
+    background-color: #f06292; /* Medium Pink */
+    color: #ffffff;
+    align-self: flex-end;
+    margin-left: auto;
+    border-bottom-right-radius: 0.4rem;
+}
+
+.bot-message {
+    background-color: #9c27b0; /* Purple */
+    color: #ffffff;
+    align-self: flex-start;
+    margin-right: auto;
+    border-bottom-left-radius: 0.4rem;
+}
+
+/* ---------- Entrada de texto ---------- */
+.chat-input-area {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.chat-input {
+    flex-grow: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 9999px;
+    outline: none;
+    font-size: 1rem;
+    color: #333;
+}
+
+.send-button {
+    background-color: #d81b60; /* Dark Pink */
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.send-button:hover {
+    background-color: #ad1457; /* Darker Pink */
+}
+
+/* ---------- Indicador de carregamento (animação) ---------- */
+.loading-indicator {
+    display: none;
+    height: 20px;
+    text-align: center;
+    color: #9c27b0;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.loading-indicator .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin: 0 2px;
+    background: #9c27b0;
+    border-radius: 50%;
+    animation: blink 1.2s infinite ease-in-out both;
+}
+
+.loading-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+.loading-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+    0%, 80%, 100% { opacity: 0; }
+    40%          { opacity: 1; }
+}
+
+/* ---------- Ícone (bot principal) ---------- */
+.icon {
+    width: 48px;
+    height: 48px;
+    background-color: #f48fb1; /* Light Pink */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* ---------- Botões de ícone (mic, mute) ---------- */
+.icon-btn {
+    background: #d81b60;
+    color: #fff;
+    padding: 0.5rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
+    transition: background-color .2s ease;
+    margin-left: .5rem;
+}
+
+.icon-btn:hover {
+    background: #ad1457;
+}
+
+.icon-btn.muted {
+    opacity: 0.5;
+}
+
+.icon-btn svg {
+    pointer-events: none; /* evita captura de clique no ícone */
+}
+
+/* ---------- Estado "ouvindo" do microfone ---------- */
+.icon-btn.listening {
+    background: #4caf50; /* verde */
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, .4); }
+    50%      { box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); }
+}
