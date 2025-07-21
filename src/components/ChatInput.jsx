@@ -1,10 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Mic, MicOff, Send, Volume2, VolumeX } from 'lucide-react';
 
 function ChatInput({ onSend, isVoiceMuted, setIsVoiceMuted }) {
   const inputRef = useRef(null);
   const micButtonRef = useRef(null);
   const recognitionRef = useRef(null);
+  const [isListening, setIsListening] = useState(false); // 👈 novo estado
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,6 +32,9 @@ function ChatInput({ onSend, isVoiceMuted, setIsVoiceMuted }) {
     const micBtn = micButtonRef.current;
     micBtn.addEventListener('click', handleMicClick);
 
+    recognition.addEventListener('start', () => setIsListening(true));
+    recognition.addEventListener('end', () => setIsListening(false));
+
     recognition.addEventListener('result', (e) => {
       const transcript = e.results[0][0].transcript;
       inputRef.current.value = transcript;
@@ -40,10 +44,13 @@ function ChatInput({ onSend, isVoiceMuted, setIsVoiceMuted }) {
     recognition.addEventListener('error', (e) => {
       console.error('[Reconhecimento de voz]', e);
       onSend('Desculpe, não consegui entender o que você disse.');
+      setIsListening(false);
     });
 
     return () => {
       micBtn.removeEventListener('click', handleMicClick);
+      recognition.removeEventListener('start', () => {});
+      recognition.removeEventListener('end', () => {});
       recognition.removeEventListener('result', () => {});
       recognition.removeEventListener('error', () => {});
     };
@@ -66,11 +73,11 @@ function ChatInput({ onSend, isVoiceMuted, setIsVoiceMuted }) {
       <button
         type="button"
         ref={micButtonRef}
-        className="icon-btn"
+        className={`icon-btn ${isListening ? 'listening' : ''}`} // 👈 classe visual
         title="Falar"
         aria-label="Ativar reconhecimento de voz"
       >
-        <Mic size={20} />
+        {isListening ? <MicOff size={20} /> : <Mic size={20} />}
       </button>
 
       <button
