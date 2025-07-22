@@ -11,7 +11,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [isVoiceMuted, setIsVoiceMuted] = useState(true);
   const chatRef = useRef(null);
-  const hasWelcomed = useRef(false); // <- garante que só roda uma vez
+  const hasWelcomed = useRef(false); // Evita múltiplas mensagens de boas-vindas
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -40,6 +40,7 @@ function App() {
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
 
+    // Busca local na base de conhecimento embutida
     for (const key in knowledgeBase) {
       const normKey = key.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       if (normalized.includes(normKey)) {
@@ -61,13 +62,20 @@ function App() {
 
       const result = await resp.json();
 
-      if (Array.isArray(result.messages)) {
+      // Verifica se houve erro no backend
+      if (result.error) {
+        addMessage(`⚠️ ${result.error}`);
+      }
+      // Se a resposta for válida (lista de mensagens)
+      else if (Array.isArray(result.messages)) {
         for (const r of result.messages) {
           addMessage(r);
           await delay(500);
         }
-      } else {
-        addMessage("Desculpe, recebi uma resposta inesperada.");
+      }
+      // Se formato inesperado
+      else {
+        addMessage("❌ Resposta inesperada do servidor.");
       }
     } catch (err) {
       console.error('[Backend Error]:', err);
@@ -77,8 +85,9 @@ function App() {
     }
   };
 
+  // Mensagem de boas-vindas na primeira carga
   useEffect(() => {
-    if (hasWelcomed.current) return; // <-- garante que boas-vindas só ocorre uma vez
+    if (hasWelcomed.current) return;
     hasWelcomed.current = true;
 
     const boasVindas = async () => {
